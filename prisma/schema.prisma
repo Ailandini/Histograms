@@ -12,3 +12,14 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Commodity {
+  id Int @id @default(autoincrement())
+  attribute String
+  commodity String
+  commodity_type String
+  units String
+  year String
+  year_type String
+  value Float
+}
