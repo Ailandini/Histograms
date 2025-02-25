@@ -1,17 +1,19 @@
 import request from 'supertest';
 import app from './app';
+import { Server } from 'http';
 
-describe('User API', () => {
-  it('should create a new user', async () => {
-    const res = await request(app)
-      .post('/users')
-      .send({ name: 'John Doe', email: 'john@example.com' });
-    expect(res.status).toBe(201);
-    expect(res.body.name).toBe('John Doe');
+describe('Commodities API', () => {
+  let server: Server;
+  beforeAll(() => {
+    server = app.listen();
+  });
+  
+  afterAll((done) => {
+    server.close(done);
   });
 
-  it('should retrieve users', async () => {
-    const res = await request(app).get('/users');
+  it('should retrieve commodities', async () => {
+    const res = await request(app).get('/commodities');
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
   });

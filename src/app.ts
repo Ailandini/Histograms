@@ -1,22 +1,21 @@
 import express, { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
+const PORT = process.env.PORT || 8000;
 
 const app = express();
 const prisma = new PrismaClient();
 
 app.use(express.json());
 
-app.get('/users', async (req: Request, res: Response) => {
-  const users = await prisma.user.findMany();
-  res.json(users);
+app.get('/commodities', async (req: Request, res: Response) => {
+  const commodities = await prisma.commodity.findMany();
+  res.json(commodities);
 });
 
-app.post('/users', async (req: Request, res: Response) => {
-  const { name, email } = req.body;
-  const user = await prisma.user.create({
-    data: { name, email },
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
   });
-  res.status(201).json(user);
-});
+}
 
 export default app;
