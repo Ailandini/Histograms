@@ -12,9 +12,9 @@ describe('Commodities API', () => {
     server.close(done);
   });
 
-  it('should retrieve commodities', async () => {
-    const res = await request(app).get('/commodities');
+  it('should have get to retrieve unique Commodity', async () => {
+    const res = await request(app).get('/Commodity/histogram');
     expect(res.status).toBe(200);
-    expect(Array.isArray(res.body)).toBe(true);
+    expect(res.text).toBe(`<div>Rice, Beans</div>`);
   });
 });

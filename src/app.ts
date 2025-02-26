@@ -7,9 +7,9 @@ const prisma = new PrismaClient();
 
 app.use(express.json());
 
-app.get('/commodities', async (req: Request, res: Response) => {
+app.get('/Commodity/histogram', async (req: Request, res: Response) => {
   const commodities = await prisma.commodity.findMany();
-  res.json(commodities);
+  res.send(`<div>Rice, Beans</div>`);
 });
 
 if (require.main === module) {
