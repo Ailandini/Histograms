@@ -1,5 +1,5 @@
 import request from 'supertest';
-import app from './app';
+import app, { histogramHeaders } from './app';
 import { Server } from 'http';
 import csvParser from 'csv-parser';
 import fs from 'fs';
@@ -18,25 +18,9 @@ describe('Commodities API', () => {
     server.close(done);
   });
 
-  it('should have get to retrieve Commodity histogram', async () => {
-    const expectedHistogram = await getColumnHistogram('Commodity');
-    const res = await request(app).get('/Commodity/histogram');
-
-    expect(res.status).toBe(200);
-    expect(res.text).toBe(`<div style="white-space: pre-wrap;">${expectedHistogram.join('\n')}</div>`);
-  });
-
-  it('should have get to retrieve CommodityType histogram', async () => {
-    const expectedHistogram = await getColumnHistogram('CommodityType');
-    const res = await request(app).get('/CommodityType/histogram');
-
-    expect(res.status).toBe(200);
-    expect(res.text).toBe(`<div style="white-space: pre-wrap;">${expectedHistogram.join('\n')}</div>`);
-  });
-
-  it('should have get to retrieve Units histogram', async () => {
-    const expectedHistogram = await getColumnHistogram('Units');
-    const res = await request(app).get('/Units/histogram');
+  it.each(histogramHeaders)('should have a get endpoint for %s', async (header) => {
+    const expectedHistogram = await getColumnHistogram(header);
+    const res = await request(app).get(`/${header}/histogram`);
 
     expect(res.status).toBe(200);
     expect(res.text).toBe(`<div style="white-space: pre-wrap;">${expectedHistogram.join('\n')}</div>`);

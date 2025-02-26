@@ -18,7 +18,7 @@ npx prisma migrate dev --name initialize_commodities
 sleep 2
 
 echo "*** Running Migrations ***"
-npx prisma generate --sql
+npx prisma generate
 
 echo "*** Upload Test Data ***"
 npx ts-node test-data/csvUploader.ts
