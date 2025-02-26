@@ -28,6 +28,16 @@ describe('Commodities API', () => {
     expect(res.text).toBe(`<div style="white-space: pre-wrap;">${expectedHistogram.join('\n')}</div>`);
   });
 
+    it('should have get to retrieve CommodityType histogram', async () => {
+    const columnValues = await getColumnHistogram('CommodityType');
+    const expectedHistogram = Object.keys(columnValues).sort().map(key => {
+      return `${key}: ${columnValues[key]}`
+    })
+    const res = await request(app).get('/CommodityType/histogram');
+    expect(res.status).toBe(200);
+    expect(res.text).toBe(`<div style="white-space: pre-wrap;">${expectedHistogram.join('\n')}</div>`);
+  });
+
   async function getColumnHistogram(column: string) {
     const columnValues: ColumnHistogram = {}
     
