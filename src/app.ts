@@ -11,7 +11,7 @@ app.use(express.json());
 app.get('/Commodity/histogram', async (req: Request, res: Response) => {
   const commodities = await prisma.$queryRawTyped(getCommodityHistogram())
   const commoditiesForResponse = commodities.map(c => `${c.commodity}: ${c.count}`);
-  res.send(`<div>${commoditiesForResponse.join(',')}</div>`);
+  res.send(`<div style="white-space: pre-wrap;">${commoditiesForResponse.join('\n')}</div>`);
 });
 
 if (require.main === module) {

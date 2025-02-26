@@ -25,7 +25,7 @@ describe('Commodities API', () => {
     })
     const res = await request(app).get('/Commodity/histogram');
     expect(res.status).toBe(200);
-    expect(res.text).toBe(`<div>${expectedHistogram.join(',')}</div>`);
+    expect(res.text).toBe(`<div style="white-space: pre-wrap;">${expectedHistogram.join('\n')}</div>`);
   });
 
   async function getColumnHistogram(column: string) {
