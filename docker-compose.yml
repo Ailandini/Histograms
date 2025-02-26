@@ -11,9 +11,13 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./data/db:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql/data # Use a named volume
     networks:
       - db-network
+
+volumes:
+  db_data: # Define the named volume
+    driver: local
 
 networks:
   db-network:
