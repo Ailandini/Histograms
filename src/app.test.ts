@@ -19,21 +19,17 @@ describe('Commodities API', () => {
   });
 
   it('should have get to retrieve Commodity histogram', async () => {
-    const columnValues = await getColumnHistogram('Commodity');
-    const expectedHistogram = Object.keys(columnValues).sort().map(key => {
-      return `${key}: ${columnValues[key]}`
-    })
+    const expectedHistogram = await getColumnHistogram('Commodity');
     const res = await request(app).get('/Commodity/histogram');
+
     expect(res.status).toBe(200);
     expect(res.text).toBe(`<div style="white-space: pre-wrap;">${expectedHistogram.join('\n')}</div>`);
   });
 
-    it('should have get to retrieve CommodityType histogram', async () => {
-    const columnValues = await getColumnHistogram('CommodityType');
-    const expectedHistogram = Object.keys(columnValues).sort().map(key => {
-      return `${key}: ${columnValues[key]}`
-    })
+  it('should have get to retrieve CommodityType histogram', async () => {
+    const expectedHistogram = await getColumnHistogram('CommodityType');
     const res = await request(app).get('/CommodityType/histogram');
+
     expect(res.status).toBe(200);
     expect(res.text).toBe(`<div style="white-space: pre-wrap;">${expectedHistogram.join('\n')}</div>`);
   });
@@ -56,6 +52,8 @@ describe('Commodities API', () => {
       .on('error', reject);
     });
 
-    return columnValues;
+    return Object.keys(columnValues).sort().map(key => {
+      return `${key}: ${columnValues[key]}`
+    });
   }
 });
