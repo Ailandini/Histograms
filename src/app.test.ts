@@ -4,6 +4,10 @@ import { Server } from 'http';
 import csvParser from 'csv-parser';
 import fs from 'fs';
 
+type ColumnHistogram = {
+  [key: string]: number;
+}
+
 describe('Commodities API', () => {
   let server: Server;
   beforeAll(() => {
@@ -14,22 +18,29 @@ describe('Commodities API', () => {
     server.close(done);
   });
 
-  it('should have get to retrieve unique Commodity', async () => {
-    const columnValues = await getColumnValues('Commodity');
-    const distinctColumnValues = [...new Set(columnValues)];
+  it('should have get to retrieve Commodity histogram', async () => {
+    const columnValues = await getColumnHistogram('Commodity');
+    const expectedHistogram = Object.keys(columnValues).sort().map(key => {
+      return `${key}: ${columnValues[key]}`
+    })
     const res = await request(app).get('/Commodity/histogram');
     expect(res.status).toBe(200);
-    expect(res.text).toBe(`<div>${distinctColumnValues.join(',')}</div>`);
+    expect(res.text).toBe(`<div>${expectedHistogram.join(',')}</div>`);
   });
 
-  async function getColumnValues(column: string) {
-    const columnValues: string[] = []
+  async function getColumnHistogram(column: string) {
+    const columnValues: ColumnHistogram = {}
     
     await new Promise<void>((resolve, reject) => {
       fs.createReadStream('test-data/Projection2021.csv')
       .pipe(csvParser())
       .on('data', (row) => {
-        columnValues.push(row[column])
+        const value = row[column]
+        if (!columnValues[value]) {
+          columnValues[value] = 1;
+          return;
+        }
+        columnValues[value]++;
       })
       .on('end', resolve)
       .on('error', reject);

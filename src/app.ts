@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
-import { PrismaClient, Commodity } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
+import { getCommodityHistogram } from '@prisma/client/sql'
 const PORT = process.env.PORT || 8000;
 
 const app = express();
@@ -8,11 +9,8 @@ const prisma = new PrismaClient();
 app.use(express.json());
 
 app.get('/Commodity/histogram', async (req: Request, res: Response) => {
-  const commodities: Pick<Commodity, 'commodity'>[] = await prisma.commodity.findMany({
-    distinct: ['commodity'],
-    select: { commodity: true }
-  });
-  const commoditiesForResponse = commodities.map(c => c.commodity);
+  const commodities = await prisma.$queryRawTyped(getCommodityHistogram())
+  const commoditiesForResponse = commodities.map(c => `${c.commodity}: ${c.count}`);
   res.send(`<div>${commoditiesForResponse.join(',')}</div>`);
 });
 
