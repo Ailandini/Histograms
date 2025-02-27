@@ -23,6 +23,16 @@ const result = async (column: CommoditiesHeader) => await prisma.$queryRawUnsafe
 app.use(express.json());
 
 
+app.get('/', async (req: Request, res: Response) => {
+  const buttons = histogramHeaders.map(header => 
+    `<button onclick="location.href='/${header}/histogram'">${header}</button>`
+  )
+  
+  res.send(`<div style="white-space: pre-wrap;">Please visit one of the following:\n
+    ${buttons.join('    ')}
+    </div>`)
+})
+
 histogramHeaders.forEach(header => {
   app.get(`/${header}/histogram`, async (req: Request, res: Response) => {
     const dbHeader = camelToSnakeCaseRobust(header)
