@@ -1,6 +1,5 @@
 import express, { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
-import { getCommodityHistogram, getCommodityTypeHistogram, getUnitsHistogram } from '@prisma/client/sql'
 const PORT = process.env.PORT || 8000;
 
 const app = express();
