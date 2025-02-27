@@ -10,8 +10,8 @@ interface DynamicRow {
   [key: string]: any;
 }
 
-type CommoditiesHeader = 'commodity' | 'commodity_type' | 'units' | 'year_type' | 'year'
-export const histogramHeaders = ['Commodity', 'CommodityType', 'Units', 'YearType', 'Year']
+type CommoditiesHeader = 'attribute' | 'commodity' | 'commodity_type' | 'units' | 'year_type' | 'year' | 'value'
+export const histogramHeaders = ['Attribute', 'Commodity', 'CommodityType', 'Units', 'YearType', 'Year', 'Value']
 
 const result = async (column: CommoditiesHeader) => await prisma.$queryRawUnsafe(
   `SELECT ${column}, count(*) as "count" from "Commodity"
